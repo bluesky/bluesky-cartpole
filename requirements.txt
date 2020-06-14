@@ -1,1 +1,7 @@
-# List required packages in this file, one per line.
+setuptools >= 47.1.1
+gym
+tensorflow
+tensorforce
+bluesky
+ophyd
+databroker
