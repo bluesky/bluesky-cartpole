@@ -47,6 +47,7 @@ setup(
     entry_points={
         'console_scripts': [
             # 'command = some.module:some_function',
+            "bluesky-cartpole = bluesky_cartpole.run_cartpole:run",
         ],
     },
     include_package_data=True,
