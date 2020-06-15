@@ -13,3 +13,23 @@ Train a cartpole agent with bluesky and oophyd!
 
 * Free software: 3-clause BSD license
 
+Install
+-------
+
+python3 -m venv venv
+
+source venv/bin/activate
+
+pip install --upgrade pip
+
+
+git clone
+
+cd bluesky-cartpole
+
+pip install -e .
+
+Run
+---
+
+bluesky-cartpole
