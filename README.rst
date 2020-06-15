@@ -9,7 +9,7 @@ bluesky-cartpole
         :target: https://pypi.python.org/pypi/bluesky-cartpole
 
 
-Train a cartpole agent with bluesky and oophyd!
+Train a cartpole agent with bluesky and ophyd!
 
 * Free software: 3-clause BSD license
 
