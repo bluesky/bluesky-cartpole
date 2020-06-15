@@ -23,7 +23,7 @@ source venv/bin/activate
 pip install --upgrade pip
 
 
-git clone
+git clone git@github.com:bluesky/bluesky-cartpole.git
 
 cd bluesky-cartpole
 
