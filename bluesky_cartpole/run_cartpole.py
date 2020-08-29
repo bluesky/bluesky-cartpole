@@ -10,7 +10,6 @@ def run():
 
     bec = BestEffortCallback()
 
-    # Send all metadata/data captured to the BestEffortCallback.
     RE.subscribe(bec)
 
     db = Broker.named("temp")
@@ -18,4 +17,8 @@ def run():
     # Insert all metadata/data captured into db.
     RE.subscribe(db.insert)
 
-    RE(train_cartpole_agent())
+    RE(train_cartpole_agent(episode_count=1000))
+
+
+if __name__ == "__main__":
+    run()
