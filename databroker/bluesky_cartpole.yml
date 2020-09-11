@@ -1,0 +1,6 @@
+sources:
+  bluesky_cartpole:
+    driver: bluesky-mongo-normalized-catalog
+    args:
+      metadatastore_db: mongodb://127.0.0.1:27017/mds
+      asset_registry_db: mongodb://127.0.0.1:27017/assets
