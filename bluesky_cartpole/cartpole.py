@@ -21,6 +21,8 @@ class CartPole(Device):
         Signal, value=np.asarray([math.nan, math.nan, math.nan, math.nan])
     )
 
+    average_evaluation_reward = Cpt(Signal, value=0.0)
+
     def __init__(self, name="cartpole", prefix="CARTPOLE", **kwargs):
         super().__init__(name=name, prefix=prefix)
 
@@ -73,27 +75,50 @@ class CartPole(Device):
         return [self]
 
 
-def get_cartpole_agent(cartpole):
-    agent = Agent.create(
-        agent="a2c",
-        batch_size=100,  # this seems to help a2c
-        exploration=0.01,  # tried without this at first
-        variable_noise=0.05,
-        # variable_noise=0.01 bad?
-        l2_regularization=0.1,
-        entropy_regularization=0.2,
-        horizon=10,  # does this help a2c? yes
-        environment=cartpole.cartpole_env,
-        # the gym cartpole environment will supply max_episode_timesteps
-        # max_episode_timesteps=max_turns,
-        summarizer=dict(
-            directory="data/summaries",
-            # list of labels, or 'all'
-            labels=["graph", "entropy", "kl-divergence", "losses", "rewards"],
-            frequency=10,  # store values every 10 timesteps
-        ),
-    )
-    return agent
+def get_cartpole_agent(agent_name, cartpole_device):
+    if agent_name == "a2c":
+        agent_parameters = dict(
+            agent=agent_name,
+            batch_size=11,
+            variable_noise=0.1,
+            l2_regularization=0.05,  # does this help with catastrophic forgetting?
+            horizon=10,  # 10 is good, 1 is bad, 5 is bad, 20 is ok, 15 is bad
+            summarizer=dict(
+                directory="data/summaries/" + agent_name,
+                # list of labels, or 'all'
+                labels=["graph", "entropy", "kl-divergence", "losses", "rewards"],
+                frequency=10,  # store values every 10 timesteps
+            ),
+        )
+        agent = Agent.create(
+            # agent="a2c",
+            environment=cartpole_device.cartpole_env,
+            # the gym cartpole environment will supply max_episode_timesteps
+            # max_episode_timesteps=max_turns,
+            **agent_parameters,
+        )
+    elif agent_name == "ppo":
+        agent_parameters = dict(batch_size=10, variable_noise=0.1,)
+        agent = Agent.create(
+            # agent="ppo",
+            environment=cartpole_device.cartpole_env,
+            **agent_parameters,
+        )
+    elif agent_name == "dqn":
+        agent_parameters = dict(batch_size=100, variable_noise=0.2, memory=1000)
+
+        agent = Agent.create(
+            # agent="dqn",
+            environment=cartpole_device.cartpole_env,
+            # memory=1000,
+            # batch_size=100,
+            # variable_noise=0.2,
+            **agent_parameters,
+        )
+    else:
+        raise ValueError(f"agent_name '{agent_name}' is not recognized")
+
+    return agent, agent_parameters
 
 
 class CartpoleRecommender:
@@ -118,7 +143,7 @@ class CartpoleRecommender:
         terminal = dependent_values[2]
         state_after_reset = dependent_values[3]
         self.cartpole_agent.observe(reward=reward, terminal=terminal)
-        if terminal == 1:
+        if terminal > 0:
             self.total_reward = 0.0
             self.episode_count += 1
             state = state_after_reset
