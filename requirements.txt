@@ -3,5 +3,6 @@ gym
 tensorflow
 tensorforce
 bluesky
+bluesky-adaptive
 ophyd
 databroker
