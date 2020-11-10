@@ -42,7 +42,7 @@ setup(
     name="bluesky-cartpole",
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
-    description="Train a cartpole agent with bluesky and oophyd!",
+    description="Train a cartpole agent with bluesky and ophyd!",
     long_description=readme,
     author="Brookhaven National Lab",
     url="https://github.com/bluesky/bluesky-cartpole",
@@ -50,7 +50,6 @@ setup(
     packages=find_packages(exclude=["docs", "tests"]),
     entry_points={
         "console_scripts": [
-            # 'command = some.module:some_function',
             "bluesky-cartpole = bluesky_cartpole.run_cartpole:run",
         ],
     },
