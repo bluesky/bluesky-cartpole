@@ -16,18 +16,14 @@ Train a cartpole agent with bluesky and ophyd!
 Install
 -------
 
-python3 -m venv venv
+::
 
-source venv/bin/activate
-
-pip install --upgrade pip
-
-
-git clone git@github.com:bluesky/bluesky-cartpole.git
-
-cd bluesky-cartpole
-
-pip install -e .
+   python3 -m venv venv
+   source venv/bin/activate
+   pip install --upgrade pip
+   git clone git@github.com:bluesky/bluesky-cartpole.git
+   cd bluesky-cartpole
+   pip install -e .
 
 Run
 ---
