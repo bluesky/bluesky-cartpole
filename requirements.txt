@@ -1,8 +1,9 @@
 setuptools >= 47.1.1
 gym
 tensorflow
-tensorforce
+tensorforce == 0.5.5
 bluesky
 bluesky-adaptive
 ophyd
 databroker
+intake
