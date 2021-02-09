@@ -1,3 +1,4 @@
+*.svg
 data/*
 
 # Byte-compiled / optimized / DLL files
