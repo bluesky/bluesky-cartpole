@@ -52,6 +52,8 @@ setup(
         "console_scripts": [
             "bluesky-cartpole = bluesky_cartpole.run_cartpole:run",
         ],
+        "intake.catalogs": ["bluesky-cartpole = bluesky_cartpole:bluesky_cartpole_catalog_instance"],
+
     },
     include_package_data=True,
     package_data={
