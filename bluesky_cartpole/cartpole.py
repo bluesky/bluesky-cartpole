@@ -100,7 +100,7 @@ def get_cartpole_agent(agent_name, cartpole_device):
     elif agent_name == "ppo":
         agent_parameters = dict(batch_size=10, variable_noise=0.1,)
         agent = Agent.create(
-            # agent="ppo",
+            agent="ppo",
             environment=cartpole_device.cartpole_env,
             **agent_parameters,
         )
