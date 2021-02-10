@@ -1,6 +1,4 @@
 from collections import deque
-import math
-import pprint
 
 import bluesky.preprocessors as bpp
 import bluesky.plan_stubs as bps
