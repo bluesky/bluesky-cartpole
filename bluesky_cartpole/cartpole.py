@@ -10,10 +10,19 @@ from ophyd.status import Status
 
 
 class CartPole(Device):
-    # read actions from this Signal
-    # actions are set by an agent outside this device
+    """
+    An ophyd Device adapting the tensorforce Environment API to the Bluesky data acquisition API.
+
+    Instances of this class have a tensorforce cartpole Environment intended
+    to be used for training an agent on the cartpole game within a Bluesky run.
+    """
+
+    # agent actions will be sent in to the
+    # cartpole environment through this signal
     action = Cpt(Signal, value=0)
 
+    # the results of the latest agent action
+    # are made available by these signals
     next_state = Cpt(Signal, value=np.asarray([math.nan, math.nan, math.nan, math.nan]))
     reward = Cpt(Signal, value=0.0)
     terminal = Cpt(Signal, value=0)
@@ -31,21 +40,26 @@ class CartPole(Device):
         )
 
     def stage(self):
+        """
+        This method is called before starting a new training episode.
+        """
         state_after_reset_ = self.cartpole_env.reset()
         self.state_after_reset.put(state_after_reset_)
         return [self]
 
     def trigger(self):
         """
-        Read the next action from the self.action signal and
-        execute that action in the cartpole environment. Record
-        the new state of the environment (_next_state), if the
-        cartpole episode has ended (_terminal), and the reward
-        for the action (_reward).
+        Perform one training step:
+          - read the next agent action from the self.action signal
+          - execute that action in the cartpole environment
+          - record the new state of the environment
+          - record the agent's reward
+          - record whether the cartpole episode has terminated
+          - if the game has terminated reset the cartpole environment
 
         Returns
         -------
-        status_finished: Status
+        action_status: Status
             a status object in the `finished` state
         """
 
@@ -61,21 +75,42 @@ class CartPole(Device):
         #    terminal==1 -- the pole fell over
         #    terminal==2 -- the maximum number of timesteps have been taken
         if self.terminal.get() > 0:
+            # the game has ended, so reset the environment
             self.state_after_reset.put(self.cartpole_env.reset())
         else:
+            # the game is not over yet, so self.state_after_reset has no information
             self.state_after_reset.put(
                 np.asarray([math.nan, math.nan, math.nan, math.nan])
             )
 
-        status_finished = Status()
-        status_finished.set_finished()
-        return status_finished
+        action_status = Status()
+        action_status.set_finished()
+        return action_status
 
     def unstage(self):
+        """
+        There is no work to be done after training is over.
+        """
         return [self]
 
 
 def get_cartpole_agent(agent_name, cartpole_device):
+    """
+    Build a new agent for the specified cartpole device.
+
+    It would probably make more sense to pass agent_parameters
+    as a parameter to this function.
+
+    Parameters
+    ----------
+    agent_name: str
+        an identifier this function recognizes: "a2c" or "ppo"
+    cartpole_device:
+
+    Return
+    ------
+        a tensorforce Agent
+    """
     if agent_name == "a2c":
         agent_parameters = dict(
             agent=agent_name,
@@ -93,26 +128,18 @@ def get_cartpole_agent(agent_name, cartpole_device):
         agent = Agent.create(
             # agent="a2c",
             environment=cartpole_device.cartpole_env,
-            # the gym cartpole environment will supply max_episode_timesteps
+            # the cartpole environment will supply argument max_episode_timesteps
             # max_episode_timesteps=max_turns,
             **agent_parameters,
         )
     elif agent_name == "ppo":
-        agent_parameters = dict(batch_size=10, variable_noise=0.1,)
+        agent_parameters = dict(
+            batch_size=10,
+            variable_noise=0.1,
+        )
         agent = Agent.create(
             agent="ppo",
             environment=cartpole_device.cartpole_env,
-            **agent_parameters,
-        )
-    elif agent_name == "dqn":
-        agent_parameters = dict(batch_size=100, variable_noise=0.2, memory=1000)
-
-        agent = Agent.create(
-            # agent="dqn",
-            environment=cartpole_device.cartpole_env,
-            # memory=1000,
-            # batch_size=100,
-            # variable_noise=0.2,
             **agent_parameters,
         )
     else:
@@ -123,7 +150,7 @@ def get_cartpole_agent(agent_name, cartpole_device):
 
 class CartpoleRecommender:
     """
-
+    A bluesky-adaptive recommender.
     """
 
     def __init__(self, cartpole_agent):

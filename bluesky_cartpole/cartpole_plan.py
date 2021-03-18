@@ -9,6 +9,26 @@ from bluesky_cartpole.cartpole import CartPole, get_cartpole_agent
 # logging.getLogger("bluesky").setLevel("DEBUG")
 # In [8]: logging.basicConfig()
 def train_agent(env_device, agent, episode_count, *, md=None, next_point_callback=None):
+    """
+    A bluesky "plan" that trains an agent to play cartpole.
+
+    Parameters
+    ----------
+    env_device: bluesky_cartpole.cartpole.CartPole
+        the cartpole training environment
+    agent: a Tensorforce Agent
+        the agent that will be trained to play cartpole
+    episode_count: int
+        number of training episodes
+    md: dict, optional
+        bluesky metadata dictionary
+    next_point_callback: function(name, doc), optional
+        a function taking a bluesky name, document pair
+
+    Return
+    ------
+    no return value
+    """
     if md is None:
         md = {}
 
