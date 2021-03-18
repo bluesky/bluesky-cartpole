@@ -33,6 +33,6 @@ jobs:
       shell: bash -l {0}
       run: |
         set -vxeuo pipefail
-        coverage run --concurrency=thread --parallel-mode -m pytest -v -k "${TEST_CL}"
+        coverage run -m pytest
         coverage combine
         coverage report
