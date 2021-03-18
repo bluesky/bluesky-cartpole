@@ -68,7 +68,11 @@ def __test_cartpole_recommender(RE, hw):
     dc = DocumentCollector()
 
     RE.subscribe(dc.insert)
-    RE(adaptive_plan([hw.det], {hw.motor: 0}, to_recommender=cb, from_recommender=queue))
+    RE(
+        adaptive_plan(
+            [hw.det], {hw.motor: 0}, to_recommender=cb, from_recommender=queue
+        )
+    )
 
     assert len(dc.start) == 1
     assert len(dc.event) == 1
