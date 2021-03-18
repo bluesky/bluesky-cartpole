@@ -21,7 +21,6 @@ Install
   python3 -m venv venv
   source venv/bin/activate
   pip install --upgrade pip wheel
-  pip install git+https://github.com/bluesky/bluesky-adaptive.git@c3ebe70a39f6f54957d49df27654040853de5f50
   git clone git@github.com:bluesky/bluesky-cartpole.git
   cd bluesky-cartpole
   pip install -e .
