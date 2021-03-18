@@ -2,12 +2,7 @@
 bluesky-cartpole
 ================
 
-.. image:: https://img.shields.io/travis/jklynch/bluesky-cartpole.svg
-        :target: https://travis-ci.org/jklynch/bluesky-cartpole
-
-.. image:: https://img.shields.io/pypi/v/bluesky-cartpole.svg
-        :target: https://pypi.python.org/pypi/bluesky-cartpole
-
+.. image:: https://github.com/bluesky/bluesky-cartpole/actions/workflows/testing.yml/badge.svg
 
 Train a cartpole agent with bluesky and ophyd!
 
@@ -18,14 +13,19 @@ Install
 
 ::
 
-   python3 -m venv venv
-   source venv/bin/activate
-   pip install --upgrade pip
-   git clone git@github.com:bluesky/bluesky-cartpole.git
-   cd bluesky-cartpole
-   pip install -e .
+  python3 -m venv venv
+  source venv/bin/activate
+  pip install --upgrade pip wheel
+  git clone git@github.com:bluesky/bluesky-cartpole.git
+  cd bluesky-cartpole
+  pip install -e .
+
+Requirements
+------------
+
+bluesky-carpole requires a running MongoDB server.
 
 Run
 ---
 
-bluesky-cartpole
+bluesky-cartpole --agent-name ppo --episode-count 100

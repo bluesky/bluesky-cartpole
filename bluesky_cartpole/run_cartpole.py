@@ -22,7 +22,7 @@ def run():
 
     db = Broker.named("bluesky-cartpole")
 
-    # Insert all metadata/data captured into db.
+    # insert bluesky documents into databroker
     RE.subscribe(db.insert)
 
     RE(

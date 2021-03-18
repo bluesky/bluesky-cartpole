@@ -52,8 +52,8 @@ def test_per_event_adaptive_plan(RE):
         adaptive_plan(
             dets=[cartpole_device],
             first_point={cartpole_device.action: action},
-            to_brains=to_recommender,
-            from_brains=from_recommender,
+            to_recommender=to_recommender,
+            from_recommender=from_recommender,
         )
     )
 
@@ -68,7 +68,11 @@ def __test_cartpole_recommender(RE, hw):
     dc = DocumentCollector()
 
     RE.subscribe(dc.insert)
-    RE(adaptive_plan([hw.det], {hw.motor: 0}, to_brains=cb, from_brains=queue))
+    RE(
+        adaptive_plan(
+            [hw.det], {hw.motor: 0}, to_recommender=cb, from_recommender=queue
+        )
+    )
 
     assert len(dc.start) == 1
     assert len(dc.event) == 1
