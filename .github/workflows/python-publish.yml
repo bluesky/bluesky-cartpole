@@ -26,7 +26,7 @@ jobs:
       env:
         # specify username "__token__" when using an API token
         TWINE_USERNAME: __token__
-        # The PYPI_PASSWORD must be a pypi token with the "pypi-" prefix with sufficient permissions to upload this package
+        # PYPI_API_TOKEN must be a pypi token with the "pypi-" prefix with sufficient permissions to upload this package
         # https://pypi.org/help/#apitoken
         TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
       run: |
