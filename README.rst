@@ -23,7 +23,8 @@ Install
 Requirements
 ------------
 
-bluesky-carpole requires a running MongoDB server.
+bluesky-carpole requires a running MongoDB server.  By default it is assumed that MongoDB is 
+running on `localhost` (i.e. 127.0.0.1) and the default port of 27017.
 
 Run
 ---
